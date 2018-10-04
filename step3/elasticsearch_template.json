@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "order": 1,
+  "template": "{{template-name}}-*",
+  "settings": {
+    "index": {
+      "refresh_interval": "5s"
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "message_field": {
+            "path_match": "message",
+            "mapping": {
+              "norms": false,
+              "type": "text"
+            },
+            "match_mapping_type": "string"
+          }
+        },
+        {
+          "string_fields": {
+            "mapping": {
+              "norms": false,
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "match_mapping_type": "string",
+            "match": "*"
+          }
+        }
+      ],
+      "_all": {
+        "norms": false,
+        "enabled": true
+      },
+      "properties": {
+        "@timestamp": {
+          "include_in_all": false,
+          "type": "date"
+        },
+        "@version": {
+          "include_in_all": false,
+          "type": "keyword"
+        },
+        "increment": {
+          "include_in_all": false,
+          "type": "long"
+        },
+        "metric_value": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_count": {
+          "include_in_all": false,
+          "type": "integer"
+        },
+        "metric_min": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_max": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_mean": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_stddev": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_p75": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_p95": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_p98": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_p99": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_p999": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_m1": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_m5": {
+          "include_in_all": false,
+          "type": "float"
+        },
+        "metric_m15": {
+          "include_in_all": false,
+          "type": "float"
+        }
+      }
+    }
+  },
+  "aliases": {}
+}

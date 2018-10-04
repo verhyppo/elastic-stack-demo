@@ -1,0 +1,12 @@
+filebeat:
+  prospectors:
+  - input_type: log
+    paths:
+      - /mnt/log/*.log
+processors:
+- add_cloud_metadata:
+
+output.logstash:
+  hosts: ['logstash:5044']
+output.console:
+  pretty: true

@@ -1,0 +1,7 @@
+cluster.name: "docker-cluster"
+network.host: [_eth0_, _local_]
+
+# minimum_master_nodes need to be explicitly set when bound on a public IP
+# set to 1 to allow single node clusters
+# Details: https://github.com/elastic/elasticsearch/pull/17288
+action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*,logstash*

@@ -1,0 +1,8 @@
+#Do not use this in production
+config.reload.automatic: true
+#Points to the docker mount volume
+path.config: /usr/share/logstash/pipeline
+xpack.monitoring.enabled: false
+xpack.monitoring.elasticsearch.url: http://elasticsearch:9200
+xpack.monitoring.elasticsearch.username: elastic
+xpack.monitoring.elasticsearch.password: changeme

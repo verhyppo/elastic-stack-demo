@@ -1,0 +1,80 @@
+version: '2.1'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+    container_name: 'elasticsearch'
+    volumes:
+      - ./elasticsearch/settings/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      esnet:
+        aliases:
+          - elasticsearch:elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.4.0
+    container_name: 'kibana'
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
+    links:
+      - elasticsearch:elasticsearch
+  logstash_server:
+    image: docker.elastic.co/logstash/logstash:5.4.0
+    container_name: logstash_server
+    volumes:
+      - ./logstash_server/pipeline:/usr/share/logstash/pipeline/
+      - ./logstash_server/settings/logstash.yml:/usr/share/logstash/config/logstash.yml
+    links:
+      - redis:redis
+      - elasticsearch:elasticsearch
+    ports:
+      - 5000:5000/udp
+    networks:
+      esnet:
+        aliases:
+          - logstash_server:logstash
+  logstash_client:
+    image: docker.elastic.co/logstash/logstash:5.4.0
+    container_name: logstash_client
+    volumes:
+      - ./logstash_client/logs:/opt/logs
+      - ./logstash_client/pipeline:/usr/share/logstash/pipeline/
+      - ./logstash_client/settings/logstash.yml:/usr/share/logstash/config/logstash.yml
+    links:
+      - redis:redis
+    networks:
+      - esnet
+  redis:
+    image: redis:3
+    container_name: 'redis'
+    ports:
+      - 6379:6379
+    networks:
+      esnet:
+        aliases:
+          - redis:redis
+  tomcat:
+    image: tomcat:latest
+    container_name: 'tomcat'
+    ports:
+      - 8080:8080
+    links:
+      - logstash_server:logstash
+    networks:
+      - esnet
+    volumes:
+      - ./tomcat/war/ROOT.war:/usr/local/tomcat/webapps/test.war
+networks:
+  esnet:
